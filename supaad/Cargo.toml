@@ -1,0 +1,23 @@
+[package]
+name    = "supaad"
+version.workspace = true
+edition.workspace = true
+
+[[bin]]
+name = "supaad"
+path = "src/main.rs"
+
+[dependencies]
+supaa-core   = { path = "../supaa-core" }
+serde.workspace      = true
+serde_json.workspace = true
+log.workspace        = true
+anyhow.workspace     = true
+# Async runtime (tokio::signal::unix is included in "full")
+tokio = { version = "1", features = ["full"] }
+
+# Structured logging
+env_logger = "0.11"
+
+# Unix process / signal helpers
+nix = { version = "0.29", features = ["process", "signal", "fs", "user", "resource"] }

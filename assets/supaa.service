@@ -1,0 +1,46 @@
+[Unit]
+Description=Supaa Focus Resource Manager Daemon
+Documentation=https://github.com/yourname/supaa
+After=network.target dbus.service
+Wants=dbus.service
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/supaad
+ExecStop=/usr/local/bin/supaa shutdown
+Restart=on-failure
+RestartSec=3s
+
+# Runtime user — supaad must run as root to manipulate cgroups and send signals.
+User=root
+Group=root
+
+# Give the daemon ownership of the supaa cgroup subtree so it can create
+# sub-cgroups without being root at every write.
+Delegate=yes
+DelegateControllers=cpu io memory
+
+# Allow sending SIGSTOP/SIGCONT to other processes.
+CapabilityBoundingSet=CAP_KILL CAP_SYS_RESOURCE CAP_SYS_NICE CAP_SYS_ADMIN
+AmbientCapabilities=CAP_KILL CAP_SYS_RESOURCE CAP_SYS_NICE CAP_SYS_ADMIN
+
+# Hardening — keep attack surface small.
+NoNewPrivileges=no
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectHome=read-only
+ProtectSystem=full
+ReadWritePaths=/var/lib/supaa /var/log/supaa /run /sys/fs/cgroup/supaa
+
+# The daemon creates /run/supaad.sock with mode 0660, group 'supaa'.
+# install.sh creates the 'supaa' group and adds the desktop user to it so
+# that supaa-cli and supaa-ui can connect without running as root.
+# NOTE: no RuntimeDirectory here — the socket lives directly in /run.
+
+# Log to journal.
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=supaad
+
+[Install]
+WantedBy=multi-user.target

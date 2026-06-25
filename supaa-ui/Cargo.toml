@@ -1,0 +1,22 @@
+[package]
+name    = "supaa-ui"
+version.workspace = true
+edition.workspace = true
+
+[[bin]]
+name = "supaa-ui"
+path = "src/main.rs"
+
+[dependencies]
+supaa-core   = { path = "../supaa-core" }
+serde.workspace      = true
+serde_json.workspace = true
+anyhow.workspace     = true
+log.workspace        = true
+env_logger = "0.11"
+
+# GTK4 bindings
+gtk4 = { version = "0.9", features = ["v4_12"] }  # AlertDialog requires GTK >= 4.10; v4_12 on Arch is standard
+
+# Async runtime (for polling the daemon)
+glib = "0.20"

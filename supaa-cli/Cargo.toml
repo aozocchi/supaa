@@ -1,0 +1,14 @@
+[package]
+name    = "supaa-cli"
+version.workspace = true
+edition.workspace = true
+
+[[bin]]
+name = "supaa"
+path = "src/main.rs"
+
+[dependencies]
+supaa-core   = { path = "../supaa-core" }
+serde.workspace      = true
+serde_json.workspace = true
+anyhow.workspace     = true
